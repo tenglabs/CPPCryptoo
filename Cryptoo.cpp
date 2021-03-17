@@ -1,5 +1,6 @@
 #include <ctime>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -36,6 +37,49 @@ class Block
 
 };
 
+Block::Block(int idx, TransactionData d, size_t prevHash)
+{
+	index = idx;
+	data = d;
+	previousHash = prevHash;
+	blockHash = generateHash();
+
+}
+
+size_t Block::generateHash()
+{
+	hash<string> hash1;
+	hash<size_t> hash2;
+	hash<size_t> finalHash;
+	string toHash = to_string(data.amount) + data.receiverKey + data.senderKey + to_string(data.timestamp);
+
+	return finalHash(hash1(toHash) + hash2(previousHash));
+
+};
+
+size_t Block::getHash()
+{
+	return blockHash;
+
+
+}
+
+size_t Block::getPreviousHash()
+{
+	return previousHash;
+
+
+}
+
+bool Block::isHashVallid()
+{
+	return generateHash;
+
+}
+
+
+
+
 class Blockchain
 {
 private:
@@ -49,4 +93,6 @@ public:
 	void isChainValid();
 
 	Block* getLatestBlock();
+
+
 };
